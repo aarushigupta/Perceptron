@@ -48,12 +48,11 @@ def readModelParameters():
 
 def label_test_data(review, unique_words, weights_pos_neg, weights_true_fake, bias_TF, bias_PN):
     
-    one_hot_vector = [0 for x in range(len(unique_words))]
+    one_hot_vector = np.zeros(len(unique_words))
     for word in review[1:]:
         if word in unique_words:
             one_hot_vector[unique_words[word]] += 1
                 
-    one_hot_vector = np.array(one_hot_vector)
     res_true_fake = np.sum(weights_true_fake * one_hot_vector) + bias_TF
     
     res_pos_neg = np.sum(weights_pos_neg * one_hot_vector) + bias_PN
@@ -73,7 +72,7 @@ def label_test_data(review, unique_words, weights_pos_neg, weights_true_fake, bi
 
 if __name__ == '__main__':
 
-    
+
     unique_words, weights_true_fake, weights_pos_neg, bias_TF, bias_PN = readModelParameters()
     test_data = readFile(sys.argv[2])
     test_doc = [[] for x in range(len(test_data))]
@@ -84,19 +83,23 @@ if __name__ == '__main__':
         words_in_reviews_test[review_index] = remove_stop_words(words_in_reviews_test[review_index])
         test_doc[review_index].append(words_in_reviews_test[review_index][0])
         test_label_true_fake, test_label_pos_neg = label_test_data(words_in_reviews_test[review_index], unique_words, weights_pos_neg, weights_true_fake, bias_TF,bias_PN)
-        # print test_label_true_fake
-        # print "\n"
         test_doc[review_index].append(test_label_true_fake)
         test_doc[review_index].append(test_label_pos_neg)
-
+    
 
     output = ""
     for row in test_doc:
         output += " ".join(map(str,row)) + "\n"
+
+    all_words = unique_words.keys()
+    all_words.sort()
+    all_words = ' '.join(all_words)
+    with open ('words', 'w') as f:
+        f.write(all_words)
+        f.close()
         
     filename = "percepoutput.txt"
     with open (filename, 'w') as f:
         f.write(output)
         f.close()
-    # print test_label_true_fake
 

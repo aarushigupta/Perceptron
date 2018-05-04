@@ -272,7 +272,8 @@ if __name__ == '__main__':
 	total_words = 0
 
 	for review_index in range(len(data)):
-		
+		if len(data[review_index].strip()) == 0:
+			continue
 		data[review_index] = data_cleanup(data[review_index])
 		words_in_reviews[review_index] = split_into_words(data[review_index])
 		words_in_reviews[review_index] = remove_stop_words(words_in_reviews[review_index])

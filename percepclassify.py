@@ -78,6 +78,8 @@ if __name__ == '__main__':
     test_doc = [[] for x in range(len(test_data))]
     words_in_reviews_test = ['' for x in range(len(test_data))]
     for review_index in range(len(test_data)):
+        if len(test_data[review_index].strip()) == 0:
+            continue
         test_data[review_index] = data_cleanup(test_data[review_index])
         words_in_reviews_test[review_index] = split_into_words(test_data[review_index])
         words_in_reviews_test[review_index] = remove_stop_words(words_in_reviews_test[review_index])
@@ -89,6 +91,8 @@ if __name__ == '__main__':
 
     output = ""
     for row in test_doc:
+        if len(row) == 0:
+            continue
         output += " ".join(map(str,row)) + "\n"
 
     all_words = unique_words.keys()
